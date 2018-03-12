@@ -17,10 +17,10 @@ RSpec.describe UsersController, type: :controller do
   describe "POST #create" do
     context 'with valid params' do
       it 'signs the user in' do
-        post :create, params: { user:
-                                { username: Faker::LordOfTheRings.character,
-                                  password: 'abcdef' } }
-        user = User.find_by(username: Faker::LordOfTheRings.character)
+        params = { user: { username: Faker::LordOfTheRings.character,
+                           password: 'abcdef' } }
+        post :create, params: params
+        user = User.find_by(username: params[:user][:username])
         expect(session[:session_token]).to eq(user.session_token)
       end
 

@@ -15,8 +15,8 @@ RSpec.describe User, type: :model do
     it 'should find a user by its credentials' do
       credentials = {username: Faker::HeyArnold.character, password: 'abcdef'}
       User.create!(credentials)
-      user = User.find_by_credentials(credentials)
-      expect(user.username).to eq(Faker::HeyArnold.character)
+      user = User.find_by_credentials(credentials[:username],credentials[:password])
+      expect(user.username).to eq(credentials[:username])
     end
 
     # it 'should raise error if user does not exist' do
@@ -28,14 +28,15 @@ RSpec.describe User, type: :model do
 
   describe 'password encryption' do
     it 'does not save passwords to database' do
-      User.create!(username: Faker::HeyArnold.character, password: 'abcdef')
-      user = User.find_by(username: Faker::HeyArnold.character)
+      credentials = {username: Faker::HeyArnold.character, password: 'abcdef'}
+      User.create!(credentials)
+      user = User.find_by(username: credentials[:username])
       expect(user.password).not_to eq('abcdef')
     end
 
     it 'encrypts the password using BCrypt' do
       user_params = {username: Faker::HeyArnold.character, password: 'abcdef'}
-      expect(BCrypt::Password).to receive(:create).with(user_params.password)
+      expect(BCrypt::Password).to receive(:create).with(user_params[:password])
       User.new(user_params)
     end
   end
