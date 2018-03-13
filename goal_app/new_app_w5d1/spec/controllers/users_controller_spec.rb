@@ -24,11 +24,11 @@ RSpec.describe UsersController, type: :controller do
         expect(session[:session_token]).to eq(user.session_token)
       end
 
-      it 'redirects to links_url' do
+      it 'redirects to new_user_url' do
         post :create, params: { user:
                                 { username: Faker::LordOfTheRings.character,
                                   password: 'abcdef' } }
-        expect(response).to redirect_to(links_url)
+        expect(response).to redirect_to(new_user_url)
       end
     end
 
@@ -38,7 +38,7 @@ RSpec.describe UsersController, type: :controller do
         post :create, params: { user:
                                 { username: Faker::LordOfTheRings.character,
                                   password: '' } }
-        expect(response).to render(:new)
+        expect(response).to render_template(:new)
         expect(flash[:errors]).to be_present
       end
     end
